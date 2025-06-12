@@ -1,0 +1,13 @@
+# OpenAI API設定
+openai:
+  api:
+    key: ${OPENAI_API_KEY}
+
+# サーバー設定
+server:
+  port: 8080
+
+# アプリケーション設定
+spring:
+  application:
+    name: ai-recipe-app
