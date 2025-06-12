@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title th:text="${title}">AIレシピ生成アプリ</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f4f8;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #2c3e50;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e6ed;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+
+        button {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            width: 100%;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover:not(:disabled) {
+            background: linear-gradient(135deg, #2980b9, #2471a3);
+        }
+
+        button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fafafa;
+            border-radius: 8px;
+            border-left: 5px solid #3498db;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+
+        .recipe-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #1a237e;
+        }
+
+        .recipe-section {
+            margin-bottom: 15px;
+        }
+ 
+        .recipe-section u {
+            font-weight: bold;
+            font-size: 18px;
+            color: #34495e;
+        }
+
+        .recipe-list {
+            margin-left: 20px;
+            list-style-type: disc;
+            color: #555;
+        }
+
+        /* Fade-in animation for result */
+		@keyframes fadeIn {
+		  from {opacity: 0;}
+		  to {opacity: 1;}
+		}
+		
+		.result.fade-in {
+		  animation: fadeIn 0.5s ease forwards;
+		}
+		
+		/* Button pulse animation while loading */
+		@keyframes pulse {
+		  0%, 100% { box-shadow: 0 0 0 0 rgba(41, 128, 185, 0.7); }
+		  50% { box-shadow: 0 0 10px 6px rgba(41, 128, 185, 0.4); }
+		}	
+		
+		/* Responsive */
+		@media (max-width: 768px) {
+		    .container {
+		        padding: 25px;
+		        margin: 10px;
+		    }
+		    
+		    .header h1 {
+		        font-size: 2.2em;
+		    }
+		}
+		
+		@media (max-width: 480px) {
+		    body {
+		        padding: 10px;
+		    }
+		    
+		    .header h1 {
+		        font-size: 1.8em;
+		    }
+		}		
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🍳 AIレシピ生成アプリ</h1>
+        <p>材料を入力するだけで、AIが美味しいレシピを提案します。</p>
+    </div>
+
+    <div class="container">
+        <h2>レシピを生成してみよう</h2>
+        <form id="recipeForm">
+		  <div class="input-group">
+		    <label for="ingredients">材料を入力してください（カンマ区切り）:</label>
+		    <textarea id="ingredients" name="ingredients" rows="4" placeholder="例: 鶏肉、 玉ねぎ、 にんじん、 じゃがいも、 醤油"></textarea>
+		    <div class="input-info">
+		      <span id="char-counter">0/500</span>
+		      <span class="input-hint">💡 材料はカンマで区切ってください!</span>
+		    </div>
+		  </div>
+		  <button type="submit" id="generateBtn">レシピを生成する</button>
+		</form>
+
+        <div id="result" class="result" style="display: none;">
+        	<h3>生成されたレシピ</h3>
+            <div id="recipe-content"></div>
+        </div>
+    </div>
+
+    <!-- Load marked.js for Markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="/js/recipe.js"></script>
+</body>
+</html>
