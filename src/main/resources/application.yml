@@ -1,13 +1,19 @@
-# OpenAI API設定
 openai:
   api:
     key: ${OPENAI_API_KEY}
 
-# サーバー設定
 server:
-  port: 8080
+  port: ${PORT:8080}
 
-# アプリケーション設定
 spring:
   application:
     name: ai-recipe-app
+
+# ログ設定
+logging:
+  level:
+    com.example.airecipe: INFO
+    org.springframework: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
