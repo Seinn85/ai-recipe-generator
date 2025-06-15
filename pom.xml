@@ -40,7 +40,7 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-		<!-- Removed spring-boot-devtools for production -->
+		<-- Removed spring-boot-devtools for production -->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -82,5 +82,4 @@
         		</plugin>
     		</plugins>
 	</build>
-
 </project>
