@@ -1,20 +1,27 @@
-# Use an official JDK base image
-FROM eclipse-temurin:21-jdk
+# Stage 1: Build stage
+FROM eclipse-temurin:21-jdk AS build
 
-# Set working directory
 WORKDIR /app
 
-# Copy the project files into the container
-COPY . /app
+# Copy project files into the build container
+COPY . .
 
-# Install Maven (if you don’t have Maven Wrapper)
+# Install Maven
 RUN apt update && apt install -y maven
 
-# Package the Spring Boot app (skip tests to speed up)
-RUN apt update && apt install -y maven && mvn clean package -DskipTests
+# Build the project and skip tests to speed up build
+RUN mvn clean package -DskipTests
 
-# Set the port to be used by the container (Render uses PORT env)
+# Stage 2: Runtime stage
+FROM eclipse-temurin:21-jdk
+
+WORKDIR /app
+
+# Copy the built JAR from the build stage
+COPY --from=build /app/target/ai-recipe-generator-0.0.1-SNAPSHOT.jar app.jar
+
+# Expose port your app listens on
 EXPOSE 8080
 
-# Run the packaged Spring Boot application
-CMD ["java", "-jar", "target/ai-recipe-generator-0.0.1-SNAPSHOT.jar"]
+# Run the Spring Boot app
+CMD ["java", "-jar", "app.jar"]
