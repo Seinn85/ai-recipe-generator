@@ -18,7 +18,7 @@ FROM eclipse-temurin:21-jdk
 WORKDIR /app
 
 # Copy the built JAR from the build stage
-COPY --from=build /app/target/ai-recipe-generator-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/target/ai-recipe-app.jar app.jar
 
 # Expose port your app listens on
 EXPOSE 8080
