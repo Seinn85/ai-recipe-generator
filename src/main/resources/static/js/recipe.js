@@ -1,3 +1,5 @@
+let currentRecipeData = null;
+
 document.getElementById('recipeForm').addEventListener('submit', async function (e) {
     e.preventDefault();
 
@@ -22,12 +24,13 @@ document.getElementById('recipeForm').addEventListener('submit', async function 
         return;
     }
 
-	// 不適切な文字のチェック
-	//if (!/^[a-zA-Z0-9ひらがなカタカナ漢字\s、,，．.・\-]+$/.test(ingredients)) {
-	if (!/^[a-zA-Z0-\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF\s、,，．.・\-]+$/.test(ingredients)) {
+    // 不適切な文字のチェック
+    // Allow: English letters, digits, hiragana, katakana, kanji, spaces, and some Japanese punctuation
+    const allowedCharsRegex = /^[a-zA-Z0-9\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF\s、,，．.・\-]+$/;
+    if (!allowedCharsRegex.test(ingredients)) {
         showError('材料には使用できない文字が含まれています');
         return;
-    }	
+    }
 
     // ボタンの状態変更（読み込み中）
     generateBtn.disabled = true;
@@ -43,7 +46,7 @@ document.getElementById('recipeForm').addEventListener('submit', async function 
     // API通信
     fetch('/api/recipe/generate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json; charset=UTF-8' },
         body: JSON.stringify({ ingredients }),
     })
         .then(res => res.json())
